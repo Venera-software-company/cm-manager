@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm, FieldValues, useFieldArray } from "react-hook-form";
 import { useQuery } from "react-query";
 
-import { BsThreeDotsVertical, BsFillFileEarmarkArrowDownFill, BsFillTrashFill } from "react-icons/bs"; //icones
+import { BsThreeDotsVertical, BsFillFileEarmarkArrowDownFill, BsFillTrashFill, BsFillGearFill } from "react-icons/bs"; //icones
 import {
   MdKeyboardDoubleArrowRight,
   MdKeyboardDoubleArrowLeft,
@@ -22,6 +22,17 @@ import { motion } from "framer-motion";
 
 import logo from "../../assets/icons/caio-moveis-logo-no-bg.png";
 
+type SelectedImageObjInfoType = {
+  type: string;
+  client: {
+    name:string,
+    address:string
+  }
+  image: string;
+};
+
+
+
 export default function App() {
   const [page, setPage] = useState(1);
   const [image, setImage] = useState('');
@@ -30,10 +41,12 @@ export default function App() {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [hover, setHover] = useState<number | null>(null);
   const [openEditModal, setOpenEditModal] = useState(false);
-
+  const [openFullScreenModal, setOpenFullScreenModal] = useState(false);
+  const [selectedImageObjInfo, setSelectedImageObjInfo] = useState<SelectedImageObjInfoType | null>(null);
+  
   const { handleSubmit, register, formState, control, reset } = useForm();
   const { errors } = formState;
-
+  
   const { fields, replace, remove } = useFieldArray({
     control,
     name: "draws"
@@ -151,6 +164,20 @@ export default function App() {
     setOpenEditModal(false);
   }
 
+  const handleEditModal = (cardDataObj: SelectedImageObjInfoType) => {
+    reset({
+      type: cardDataObj.type,
+      clientName: cardDataObj.client.name,
+      clientAddress: cardDataObj.client.address
+    });
+    setOpenEditModal(true);
+  }
+
+  const handleCloseFullscreenModal = () => {
+    setSelectedImageObjInfo(null),
+    setOpenFullScreenModal(false);
+  };
+
   const donwloadImage = (srcLink: string, cardId: string) => {
     const a = Object.assign(document.createElement("a"), { 
       href: srcLink, 
@@ -234,6 +261,30 @@ export default function App() {
               </button>
             </div>
           </form>
+        </div>
+      </Modal>
+      <Modal
+        title={selectedImageObjInfo?.type}
+        open={openFullScreenModal}
+        setOpen={setOpenFullScreenModal}
+        options={{
+          onClose: handleCloseFullscreenModal,
+          modalWrapperClassName: "w-[70%] px-0",
+          titleWrapperClassName: "!px-6",
+        }}
+      >
+        <div className="px-6">
+          {
+            (selectedImageObjInfo?.image ) && (
+              <Image 
+                src={selectedImageObjInfo.image} 
+                alt="" 
+                className="w-screen"
+                width={384}
+                height={56}
+              />
+            )
+          }
         </div>
       </Modal>
       <nav className="flex justify-between md:px-20 xxs:px-4 sm:px-4 py-3 items-center border border-transparent border-b-gray-900">
@@ -379,8 +430,23 @@ export default function App() {
                                   onClick={() => donwloadImage(draw.image, draw._id)}
                                 >
                                   <div className="flex flex-row space-x-2 !text-gray-900 dark:!text-gray-300">
-                                    <span className="my-auto text-[11px] text-inherit">Baixar imagem</span>
+                                    <span className="my-auto text-[11px] text-inherit">Baixar projeto</span>
                                     <BsFillFileEarmarkArrowDownFill size={22} className="mt-1"/>
+                                  </div>
+                                </a>
+                              </li>
+                              <li className="text-xs uppercase tracking-widest">
+                                <a 
+                                  className="hover:!bg-[#e6e6e6] dark:hover:!bg-[#222222]"
+                                  onClick={() => handleEditModal( {
+                                    type: draw.type,
+                                    client: draw.client,
+                                    image: draw.image,
+                                  } )}
+                                >
+                                  <div className="flex flex-row space-x-2 !text-gray-900 dark:!text-gray-300">
+                                    <span className="my-auto text-[11px] text-inherit">Editar projeto</span>
+                                    <BsFillGearFill size={22} className="mt-1"/>
                                   </div>
                                 </a>
                               </li>
@@ -391,9 +457,9 @@ export default function App() {
                                 >
                                   <div className="flex flex-row space-x-2 !text-gray-900 dark:!text-gray-300">
                                     <span className="my-auto text-[11px] text-inherit">
-                                      {loader ? "Excluindo..." : "Excluir"}
+                                      {loader ? "Excluindo..." : "Excluir projeto"}
                                     </span>
-                                    <BsFillTrashFill size={16} />
+                                    <BsFillTrashFill size={22} className="mt-1"/>
                                   </div>
                                 </a>
                               </li>
@@ -403,10 +469,18 @@ export default function App() {
                       </motion.div>
                       <Image
                         className="max-w-sm xxs:w-[20rem] w-full object-cover max-h-80 h-56 mb-0 pb-0"
+                        onClick={ () => {      
+                          setOpenFullScreenModal(true)
+                          setSelectedImageObjInfo( {
+                            type: draw.type,
+                            client: draw.client,
+                            image: draw.image,
+                          } )
+                        } }
                         src={draw.image}
-                        alt="Card image"
                         width={384}
                         height={56}
+                        alt="Card image"
                       />
                     </div>
                     <div className="px-6 py-5">
