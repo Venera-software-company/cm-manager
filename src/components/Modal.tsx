@@ -61,10 +61,10 @@ export default function Modal({ children, open, setOpen, title, options }: Props
                 type="checkbox"
                 className="modal-toggle"
             />
-            <div className="modal text-gray-900" id="noap-modal-overlay">
+            <div className="modal text-gray-900 dark:text-white" id="noap-modal-overlay">
                 <div 
                     className={`
-                        border border-stone-500 modal-box !bg-[#ffffff] relative transition-all duration-500 
+                        border border-stone-500 dark:border-gray-600 modal-box !bg-[#ffffff] dark:!bg-black relative transition-all duration-500 max-h-none
                         ${modalWrapperClassName && modalWrapperClassName}
                     `}
                     style={modalWrapperStyle ? modalWrapperStyle : {}}
@@ -76,7 +76,7 @@ export default function Modal({ children, open, setOpen, title, options }: Props
                         `}
                     >
                         {title && ( 
-                            <h3 className={`text-2xl tracking-tight font-light text-black ${titleCustomClassName && titleCustomClassName}`}>
+                            <h3 className={`text-2xl tracking-tight font-light ${titleCustomClassName && titleCustomClassName}`}>
                                 {title}
                             </h3> 
                         )}
@@ -89,7 +89,7 @@ export default function Modal({ children, open, setOpen, title, options }: Props
                                     >
                                         <RiArrowGoBackFill 
                                             size={18}
-                                            className="ml-[2px] text-gray-900"
+                                            className="ml-[2px] text-gray-900 dark:text-white"
                                         />
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@ export default function Modal({ children, open, setOpen, title, options }: Props
                                 <div className="tooltip tooltip-bottom uppercase tracking-wide before:!text-[11.5px]" data-tip="Close">
                                     <label 
                                         htmlFor="my-modal-3"
-                                        className={`btn btn-sm btn-circle text-gray-900 bg-[#ffffff] pb-[1px] ${closeButtonClassName && closeButtonClassName}`}
+                                        className={`btn btn-sm btn-circle text-gray-900 dark:text-white bg-[#ffffff] pb-[1px] ${closeButtonClassName && closeButtonClassName}`}
                                         onClick={() => onClose ? onClose() : setOpen && setOpen(false)}
                                     >
                                         <AiOutlineClose size={16} className="my-[7px]" />
@@ -107,7 +107,7 @@ export default function Modal({ children, open, setOpen, title, options }: Props
                             ) : ( 
                                 <label 
                                     htmlFor="my-modal-3"
-                                    className={`transition-all duration-300 ease-in-out bg-[#ffffff] border border-gray-500 text-gray-900 btn btn-sm btn-circle bg-inherit hover:bg-[#eeeff1] pb-[1px] ${closeButtonClassName && closeButtonClassName}`}
+                                    className={`transition-all duration-300 ease-in-out bg-[#ffffff] border border-gray-500 text-gray-900 dark:text-white dark:hover:bg-[#1d232a] btn btn-sm btn-circle bg-inherit hover:bg-[#eeeff1] pb-[1px] ${closeButtonClassName && closeButtonClassName}`}
                                     onClick={() => onClose ? onClose() : setOpen && setOpen(false)}
                                 >
                                     <AiOutlineClose size={16} className="my-[7px]"/>

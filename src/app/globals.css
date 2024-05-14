@@ -51,6 +51,10 @@
   }
 }
 
+html {
+  overflow: hidden !important;
+}
+
 * {
   font-family: "Ubuntu";
   margin: 0;
@@ -70,5 +74,5 @@ input[type=number] {
 }
 
 .invert-color {
-  filter: invert(100%) sepia(36%) saturate(1130%) hue-rotate(177deg) brightness(88%) contrast(95%) !important;
+  filter: invert(100%) sepia(36%) saturate(1130%) hue-rotate(177deg) brightness(100%) contrast(100%) !important;
 }
